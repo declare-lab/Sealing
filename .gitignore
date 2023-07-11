@@ -1,0 +1,15 @@
+ClipBERT/
+Video-Extractor/
+
+__pycache__/
+
+*_old/
+
+# unused modules
+unused/
+
+# jupyter notebooks
+*.ipynb
+
+# saved checkpoints
+saved_models/
