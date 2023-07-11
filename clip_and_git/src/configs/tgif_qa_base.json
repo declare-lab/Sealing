@@ -1,0 +1,58 @@
+{
+  "train_datasets": [
+    {
+      "name": "tgif_qa",
+      "txt": "<path_to_dataset>/qa_Train.json",
+      "img": "<path_to_dataset>/tgif_qa_video_feat.h5"
+    }
+  ],
+  "val_datasets": [
+    {
+      "name": "tgif_qa",
+      "txt": "<path_to_dataset>/qa_Train.json",
+      "img": "<path_to_dataset>/tgif_qa_video_feat.h5"
+    }
+  ],
+  "model": 
+  {
+    "txt_output_size": 512,
+    "vis_output_size": 512,
+    "num_labels": 1540,
+    "hidden_dropout_prob": 0.1,
+    "pretrained_model": "microsoft/git-base",
+    "img_len": 3,
+    "freeze": false
+  }
+  ,
+  "inference_txt_db": "<path_to_dataset>/qa_Test.json",
+  "inference_img_db": "<path_to_dataset>/tgif_qa_video_feat.h5",
+  "vid_mapping": "<path_to_dataset>/vidmapping.json",
+  "ans2label_path": "/txt/tgif_qa/train_ans2label.json",
+  "img_size": 224,
+  "img_input_format": "BGR",
+  "score_agg_func": "lse",
+  "detectron2_weights_path": null,
+  "bert_weights_path": null,
+  "output_dir": "saved_models/tgif_qa_001",
+  "nframe": 3,
+  "samp_policy": "uniform",
+  "max_n_example_per_group": 1,
+  "train_batch_size": 4,
+  "gradient_accumulation_steps": 16,
+  "val_batch_size": 16,
+  "num_train_epochs": 20,
+  "num_valid": 100,
+  "min_valid_steps": 50,
+  "learning_rate": 1e-5,
+  "weight_decay": 1e-3,
+  "decay": "multi_step",
+  "step_decay_epochs": [50],
+  "optim": "AdamW",
+  "betas": [0.9, 0.999],
+  "dropout": 0.1,
+  "grad_norm": 5.0,
+  "gamma": 0.5,
+  "seed": 42,
+  "fp16": 1,
+  "task": "tgif_qa"
+}

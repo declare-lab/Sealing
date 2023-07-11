@@ -1,9 +1,6 @@
-ClipBERT/
-Video-Extractor/
-
+# cache file
 __pycache__/
 
-*_old/
 
 # unused modules
 unused/

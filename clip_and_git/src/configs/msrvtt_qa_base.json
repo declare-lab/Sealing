@@ -1,0 +1,58 @@
+{
+  "train_datasets": [
+    {
+      "name": "msrvtt_qa",
+      "txt": "<path_to_dataset>/qa_train.json",
+      "img": "<path_to_dataset>/msrvtt_qa_video_feat.h5"
+    }
+  ],
+  "val_datasets": [
+    {
+      "name": "msrvtt_qa",
+      "txt": "<path_to_dataset>/qa_val.json",
+      "img": "<path_to_dataset>/msrvtt_qa_video_feat.h5"
+    }
+  ],
+  "model": 
+  {
+    "txt_output_size": 768,
+    "vis_output_size": 768,
+    "num_labels": 1000,
+    "hidden_dropout_prob": 0.1,
+    "pretrained_model": "microsoft/git-base",
+    "freeze": false,
+    "img_len": 2
+  }
+  ,
+  "inference_txt_db": "<path_to_dataset>/qa_test.json",
+  "inference_img_db": "<path_to_dataset>/msrvtt_qa_video_feat.h5",
+  "vid_mapping": "<path_to_dataset>/vidmapping.json",
+  "img_size": 224,
+  "img_input_format": "BGR",
+  "score_agg_func": "lse",
+  "max_n_example_per_group": 1,
+  "output_dir": "saved_models/msrvtt_qa_001",
+  "samp_policy": "importance",
+  "nframe": 2,
+  "train_batch_size": 8,
+  "gradient_accumulation_steps": 32,
+  "val_batch_size": 16,
+  "num_train_epochs": 20,
+  "min_valid_steps": 50,
+  "zero_eval": false,
+  "num_valid": 80,
+  "learning_rate": 1e-5,
+  "weight_decay": 1e-3,
+  "decay": "multi_step",
+  "decay_epocs": [50],
+  "optim": "AdamW",
+  "betas": [0.9, 0.999],
+  "dropout": 0.1,
+  "gamma": 0.5,
+  "grad_norm": 5.0,
+  "seed": 42,
+  "fp16": 1,
+  "classifier": "mlp",
+  "cls_hidden_scale": 2,
+  "task": "msrvtt_qa"
+}

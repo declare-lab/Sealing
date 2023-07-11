@@ -1,0 +1,58 @@
+{
+  "train_datasets": [
+    {
+      "name": "msvd_qa",
+      "txt": "<path_to_dataset>/qa_train.json",
+      "img": "<path_to_dataset>/msvd_qa_video_feat.h5"
+    }
+  ],
+  "val_datasets": [
+    {
+      "name": "msvd_qa",
+      "txt": "<path_to_dataset>/qa_winds_val.json",
+      "img": "<path_to_dataset>/msvd_qa_video_feat.h5"
+    }
+  ],
+  "model": 
+  {
+    "txt_output_size": 768,
+    "vis_output_size": 768,
+    "num_labels": 1000,
+    "hidden_dropout_prob": 0.1,
+    "pretrained_model": "microsoft/git-base",
+    "img_len": 4,
+    "freeze": false
+  }
+  ,
+  "inference_txt_db": "<path_to_dataset>/qa_test.json",
+  "inference_img_db": "<path_to_dataset>/msvd_qa_video_feat.h5",
+  "vid_mapping": "<path_to_dataset>/vidmapping.json",
+  "ans2label_path": "/txt/msvd_qa/train_ans2label.json",
+  "img_size": 224,
+  "img_input_format": "BGR",
+  "score_agg_func": "lse",
+  "detectron2_weights_path": null,
+  "bert_weights_path": null,
+  "output_dir": "saved_models/msvd_qa_001",
+  "nframe": 4,
+  "samp_policy": "importance",
+  "max_n_example_per_group": 1,
+  "train_batch_size": 2,
+  "gradient_accumulation_steps": 128,
+  "val_batch_size": 16,
+  "num_train_epochs": 20,
+  "num_valid": 60,
+  "min_valid_steps": 20,
+  "learning_rate": 1e-5,
+  "weight_decay": 1e-3,
+  "decay": "multi_step",
+  "step_decay_epochs": [50],
+  "optim": "AdamW",
+  "betas": [0.9, 0.999],
+  "dropout": 0.1,
+  "grad_norm": 5.0,
+  "gamma": 0.5,
+  "seed": 42,
+  "fp16": 1,
+  "task": "msvd_qa"
+}
