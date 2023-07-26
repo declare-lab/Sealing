@@ -41,6 +41,7 @@ For experiments on CLIP and GIT, please modify our provided reference scripts (i
 ### CLIP-Dec
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
+|noDec|27.7|30.3|42.8|
 |Uniform|33.8|33.7|47.2|
 |MDF|__35.0__|35.2|__63.2__|
 |MIF|__35.0__|__35.4__|61.8|
