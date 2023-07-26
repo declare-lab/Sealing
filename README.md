@@ -34,7 +34,7 @@ The code to do sampling for all three models is same, under the folder "clip_and
     python gen_sample.py --dataset=<dataset_name> --dataset_root=<root_path> --sampling_strategy='repr' --vlm_model=<vlm_model_name> --sim_model=<sim_model_name> --task='gen_inds'
     ```
 
-### 3. Running
+### 3. How to run
 For experiments on CLIP and GIT, please modify our provided reference scripts (in 'src/scripts'). For all-in-one, please check its attached README file for more details.
 
 ## Citation

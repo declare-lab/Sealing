@@ -3,6 +3,7 @@ from .video_base_dataset import BaseDataset
 import os
 import json
 import pandas as pd
+import h5py, torch
 
 
 class MSRVTTQADataset(BaseDataset):
@@ -33,16 +34,20 @@ class MSRVTTQADataset(BaseDataset):
         self._load_metadata()
 
     def _load_metadata(self):
-        metadata_dir = './meta_data/msrvtt'
+        self.metadata_dir = metadata_dir = './meta_data/msrvtt'
         split_files = {
             'train': 'msrvtt_qa_train.jsonl',
             'val': 'msrvtt_qa_val.jsonl',
             'test': 'msrvtt_qa_test.jsonl'
         }
-        answer_fp = os.path.join(metadata_dir, 'msrvtt_train_ans2label.json')  # 1500 in total (all classes in train)
-        # answer_fp = os.path.join(metadata_dir, 'msrvtt_qa_ans2label.json')  # 4539 in total (all classes in train+val+test)
+        answer_fp = os.path.join(metadata_dir, 'ans2label.json')  # 1500 in total (all classes in train)
+        mapping_fp = os.path.join(metadata_dir, 'processed/vidmapping.json')
+        
+        self.ans_lab_dict = json.load(answer_fp)
+        self.vidmapping = json.load(mapping_fp)
         with open(answer_fp, 'r') as JSON:
             self.ans_lab_dict = json.load(JSON)
+            
         for name in self.names:
             split = name.split('_')[-1]
             target_split_fp = split_files[split]
@@ -80,17 +85,19 @@ class MSRVTTQADataset(BaseDataset):
         # return text, ans_label_vector, scores
 
     def __getitem__(self, index):
-        sample = self.metadata.iloc[index]
-        image_tensor = self.get_video(sample)
-        text = self.get_text(sample)
-        # index, question_index = self.index_mapper[index]
-        qid = index
-        if self.split != "test":
-            answers, labels, scores = self.get_answer_label(sample)
-        else:
-            answers = list()
-            labels = list()
-            scores = list()
+        with h5py.File(os.path.join(self.metadata, 'processed/msrvtt_qa_video_feat.h5'), 'r') as f:
+            sample = self.metadata.iloc[index]
+            qid = index
+            vid = self.vidmapping[sample['video']]
+            
+            image_tensor = f['sampled_frames'][vid].reshape(3, 3, 224, 224)
+            text = self.get_text(sample)
+            if self.split != "test":
+                answers, labels, scores = self.get_answer_label(sample)
+            else:
+                answers = list()
+                labels = list()
+                scores = list()
 
         return {
             "image": image_tensor,

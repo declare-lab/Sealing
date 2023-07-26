@@ -8,7 +8,6 @@ import h5py
 # 2022.1.28 read gif is too slow, may be need to speedup by convert gif -> video
 # https://stackify.dev/833655-python-convert-gif-to-videomp4
 
-
 class TGIFDataset(BaseDataset):
     def __init__(self, *args, split="", **kwargs):
         assert split in ["train", "val", "test"]
@@ -32,20 +31,21 @@ class TGIFDataset(BaseDataset):
         # self.num_frames = 4
         self._load_metadata()
 
-        self.sampled_idxs = json.load(open('./DataSet/tgif/processed/vididxs.json', 'r'))
-
     def _load_metadata(self):
-        metadata_dir = './meta_data/tgif'
+        self.metadata_dir = metadata_dir = './meta_data/tgif_qa'
         split_files = {
             'train': 'frameqa_train.jsonl',
             'val': 'frameqa_test.jsonl',  # frameqa_val.jsonl
             'test': 'frameqa_test.jsonl'
         }
         target_split_fp = split_files[self.split]
-        answer_fp = os.path.join(metadata_dir, 'frameqa_trainval_ans2label.json')
-        # answer_fp = os.path.join(metadata_dir, 'msrvtt_qa_ans2label.json')
+        answer_fp = os.path.join(metadata_dir, 'ans2label.json')
+        mapping_fp = os.path.join(metadata_dir, 'processed/vidmapping.json')
+
         with open(answer_fp, 'r') as JSON:
             self.ans_lab_dict = json.load(JSON)
+        with open(mapping_fp, 'r') as JSON:
+            self.vidmapping = json.load(JSON)
         # path_or_buf=os.path.join(metadata_dir, target_split_fp)
         metadata = pd.read_json(os.path.join(metadata_dir, target_split_fp), lines=True)
         self.metadata = metadata
@@ -86,17 +86,20 @@ class TGIFDataset(BaseDataset):
         # return text, ans_label_vector, scores
 
     def __getitem__(self, index):
-        sample = self.metadata.iloc[index]
-        image_tensor = self.get_video(sample)
-        text = self.get_text(sample)
-        # index, question_index = self.index_mapper[index]
-        qid = index
-        if self.split != "test":
-            answers, labels, scores = self.get_answer_label(sample)
-        else:
-            answers = list()
-            labels = list()
-            scores = list()
+        with h5py.File(os.path.join(self.metadata, 'processed/tgif_qa_video_feat.h5'), 'r') as f:
+            sample = self.metadata.iloc[index]
+
+            vid = self.vidmapping[sample['video']]
+            image_tensor = f['sampled_frames'][vid].reshape(3, 3, 224, 224) 
+            
+            text = self.get_text(sample)
+            qid = index
+            if self.split != "test":
+                answers, labels, scores = self.get_answer_label(sample)
+            else:
+                answers = list()
+                labels = list()
+                scores = list()
         return {
             "image": image_tensor,
             "text": text,

@@ -2,7 +2,8 @@ import numpy as np
 from .video_base_dataset import BaseDataset
 import os
 import pandas as pd
-
+import torch, h5py
+import json
 
 class MSVDQADataset(BaseDataset):
     def __init__(self, *args, split="", **kwargs):
@@ -28,7 +29,7 @@ class MSVDQADataset(BaseDataset):
         self._load_metadata()
 
     def _load_metadata(self):
-        metadata_dir = './meta_data/msvd'
+        self.metadata_dir = metadata_dir = './meta_data/msvd'
         split_files = {
             'train': 'msvd_train_qa_encode.json',
             'val': 'msvd_val_qa_encode.json',
@@ -36,19 +37,14 @@ class MSVDQADataset(BaseDataset):
         }
         # read ans dict
         self.ans_lab_dict = {}
-        answer_fp = os.path.join(metadata_dir, 'msvd_answer_set.txt')
+        # answer_fp = os.path.join(metadata_dir, 'msvd_ans
+        answer_fp = os.path.join(metadata_dir, 'ans2label.json')
         self.youtube_mapping_dict = dict()
-        with open(os.path.join(metadata_dir, 'msvd_youtube_mapping.txt')) as f:
-            lines = f.readlines()
-            for line in lines:
-                info = line.strip().split(' ')
-                self.youtube_mapping_dict[info[1]] = info[0]
-        with open(answer_fp, 'r') as f:
-            lines = f.readlines()
-            count = 0
-            for line in lines:
-                self.ans_lab_dict[str(line.strip())] = count
-                count += 1
+        mapping_fp = os.path.join(metadata_dir, './processed/vidmapping.json')
+        
+        
+        self.ans_lab_dict = json.load(answer_fp)
+        self.vidmapping = json.load(mapping_fp)
         for name in self.names:
             split = name.split('_')[-1]
             target_split_fp = split_files[split]
@@ -90,17 +86,19 @@ class MSVDQADataset(BaseDataset):
         # return text, ans_label_vector, scores
 
     def __getitem__(self, index):
-        sample = self.metadata[index].iloc[0]
-        image_tensor = self.get_video(sample)
-        text = self.get_text(sample)
-        # index, question_index = self.index_mapper[index]
-        qid = index
-        if self.split != "test":
-            answers, labels, scores = self.get_answer_label(sample)
-        else:
-            answers = list()
-            labels = list()
-            scores = list()
+        with h5py.File(os.path.join(self.metadata, 'processed/msvd_qa_video_feat.h5')) as f:
+            sample = self.metadata[index].iloc[0]
+            qid = index
+            vid = self.vidmapping[sample['video_id']]
+            
+            image_tensor = f['sampled_frames'][vid].reshape(3, 3, 224, 224)
+            text = self.get_text(sample)
+            if self.split != "test":
+                answers, labels, scores = self.get_answer_label(sample)
+            else:
+                answers = list()
+                labels = list()
+                scores = list()
 
         return {
             "image": image_tensor,
