@@ -3,7 +3,7 @@ from .video_base_dataset import BaseDataset, read_frames_gif
 import os
 import json
 import pandas as pd
-import h5py
+import h5py, torch
 
 # 2022.1.28 read gif is too slow, may be need to speedup by convert gif -> video
 # https://stackify.dev/833655-python-convert-gif-to-videomp4
@@ -32,7 +32,8 @@ class TGIFDataset(BaseDataset):
         self._load_metadata()
 
     def _load_metadata(self):
-        self.metadata_dir = metadata_dir = './meta_data/tgif_qa'
+        # self.metadata_dir = metadata_dir = './meta_data/tgif_qa'
+        self.metadata_dir = metadata_dir = './DataSet/tgif'
         split_files = {
             'train': 'frameqa_train.jsonl',
             'val': 'frameqa_test.jsonl',  # frameqa_val.jsonl
@@ -86,11 +87,11 @@ class TGIFDataset(BaseDataset):
         # return text, ans_label_vector, scores
 
     def __getitem__(self, index):
-        with h5py.File(os.path.join(self.metadata, 'processed/tgif_qa_video_feat.h5'), 'r') as f:
+        with h5py.File(os.path.join(self.metadata_dir, 'processed/tgif_qa_video_feat.h5'), 'r') as f:
             sample = self.metadata.iloc[index]
-
-            vid = self.vidmapping[sample['video']]
-            image_tensor = f['sampled_frames'][vid].reshape(3, 3, 224, 224) 
+            vid = self.vidmapping[sample['gif_name']]
+            frames = f['sampled_frames'][vid].reshape(1, 3, 3, 224, 224)
+            image_tensor = torch.Tensor(frames)
             
             text = self.get_text(sample)
             qid = index

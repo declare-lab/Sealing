@@ -34,7 +34,7 @@ class MSRVTTQADataset(BaseDataset):
         self._load_metadata()
 
     def _load_metadata(self):
-        self.metadata_dir = metadata_dir = './meta_data/msrvtt'
+        self.metadata_dir = metadata_dir = './DataSet/msrvtt'
         split_files = {
             'train': 'msrvtt_qa_train.jsonl',
             'val': 'msrvtt_qa_val.jsonl',
@@ -85,12 +85,13 @@ class MSRVTTQADataset(BaseDataset):
         # return text, ans_label_vector, scores
 
     def __getitem__(self, index):
-        with h5py.File(os.path.join(self.metadata, 'processed/msrvtt_qa_video_feat.h5'), 'r') as f:
+        with h5py.File(os.path.join(self.metadata_dir, 'processed/msrvtt_qa_video_feat.h5'), 'r') as f:
             sample = self.metadata.iloc[index]
             qid = index
             vid = self.vidmapping[sample['video']]
             
-            image_tensor = f['sampled_frames'][vid].reshape(3, 3, 224, 224)
+            frames = f['sampled_frames'][vid].reshape(1, 3, 3, 224, 224)
+            image_tensor = torch.Tensor(frames)
             text = self.get_text(sample)
             if self.split != "test":
                 answers, labels, scores = self.get_answer_label(sample)
