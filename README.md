@@ -37,6 +37,31 @@ The code to do sampling for all three models is same, under the folder "clip_and
 ### 3. How to run
 For experiments on CLIP and GIT, please modify our provided reference scripts (in 'src/scripts'). For all-in-one, please check its attached README file for more details.
 
+## Results
+### CLIP-Dec
+|Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
+|---|---|---|---|
+|noDec|27.7|30.3|42.8|
+|Uniform|33.8|33.7|47.2|
+|MDF|__35.0__|35.2|__63.2__|
+|MIF|__35.0__|__35.4__|61.8|
+
+### GIT-Base
+|Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
+|---|---|---|---|
+|Report|51.2|41.0|__69.1__|
+|Uniform|52.2|41.1|47.0|
+|MDF|__55.3__|42.0|68.8|
+|MIF|46.7|__42.3__|67.5|
+
+### AllInOne-Base
+|Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
+|---|---|---|---|
+|Report|46.5|42.9|64.2|
+|Uniform|46.1|42.7|64.0|
+|MDF|__46.9__|43.8|__66.2__|
+|MIF|46.7|__44.0__|65.9|
+
 ## Citation
 Please cite our paper if you find this project is related to your work
 ```
