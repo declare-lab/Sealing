@@ -1,0 +1,11 @@
+dataset
+ClipBERT/
+Video-Extractor/
+
+__pycache__/
+
+# jupyter notebooks
+*.ipynb
+
+# saved checkpoints
+saved_models/

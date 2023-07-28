@@ -2,15 +2,15 @@
   "train_datasets": [
     {
       "name": "tgif_qa",
-      "txt": "<path_to_dataset>/qa_Train.json",
-      "img": "<path_to_dataset>/tgif_qa_video_feat.h5"
+      "txt": "/data/henry/tgif_qa/dataset/qa_Train.json",
+      "img": "/data/henry/tgif_qa/processed/tgif_qa_video_feat.h5"
     }
   ],
   "val_datasets": [
     {
       "name": "tgif_qa",
-      "txt": "<path_to_dataset>/qa_Train.json",
-      "img": "<path_to_dataset>/tgif_qa_video_feat.h5"
+      "txt": "./dataset/tgif_qa/dataset/qa_Train.json",
+      "img": "/data/henry/tgif_qa/processed/tgif_qa_video_feat.h5"
     }
   ],
   "model": 
@@ -24,9 +24,9 @@
     "freeze": false
   }
   ,
-  "inference_txt_db": "<path_to_dataset>/qa_Test.json",
-  "inference_img_db": "<path_to_dataset>/tgif_qa_video_feat.h5",
-  "vid_mapping": "<path_to_dataset>/vidmapping.json",
+  "inference_txt_db": "/data/henry/tgif_qa/dataset/qa_Test.json",
+  "inference_img_db": "/data/henry/tgif_qa/processed/tgif_qa_video_feat.h5",
+  "vid_mapping": "/data/henry/tgif_qa/processed/vidmapping.json",
   "ans2label_path": "/txt/tgif_qa/train_ans2label.json",
   "img_size": 224,
   "img_input_format": "BGR",

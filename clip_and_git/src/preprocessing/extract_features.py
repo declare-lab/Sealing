@@ -130,7 +130,7 @@ if __name__ == '__main__':
     parser.add_argument('--W', type=int, default=8, help='interval length to sample 2 points')
 
     # network params
-    parser.add_argument('--vlm_model', type=str, default="microsoft/git-base")
+    parser.add_argument('--vlm_model', type=str, default="Salesforce/blip-image-captioning-base")
     parser.add_argument('--h5_fname', type=str, default="processed")
     args = parser.parse_args()
     args.seed = 666

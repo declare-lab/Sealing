@@ -30,7 +30,7 @@ CHUNK_SIZE = 256
 INTERVAL = 20
 def sample_representative_frames(frames, model, K=16, W=8, debug_counter=None):
     if W == -1: # adaptive width
-        W = len(frames) // INTERVAL
+        W = len(frames) // K
     
     feat_chunks = []
     num_frames = frames.size(0)

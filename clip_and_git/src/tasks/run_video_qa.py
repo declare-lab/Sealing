@@ -68,7 +68,7 @@ def mk_tgif_qa_dataloader(task_type, anno_path, ans2label, img_hdf5_dir, cfg, to
                 video_id=raw_d["video"].split('.')[0], # <id>.avi -> ['<id>', 'avi]
                 answer_type=raw_d["answer_type"],
                 question_id=qid,
-                sampled_inds=raw_d["sampled_inds"]
+                sampled_inds=raw_d["sampled_inds"] if "sampled_inds" in raw_d.keys() else None
             )
             datalist.append(d)
     elif task_type == 'msrvtt_qa':
@@ -204,6 +204,11 @@ def setup_dataloaders(cfg, tokenizer):
     if cfg.task in ['msvd_qa', 'msrvtt_qa']:
         anno_files = (cfg.train_datasets[0].txt,)
         ans2label = build_common_answer_dict(anno_files, 1000)  # all included
+        
+        if not os.path.exists(cfg.ans2label_path):
+            with open(os.path.join(cfg.ans2label_path), 'w') as f:
+                json.dump(ans2label, f)
+                
         train_loader = mk_tgif_qa_dataloader(
             task_type=cfg.task,
             anno_path=cfg.train_datasets[0].txt,
@@ -460,7 +465,7 @@ def start_training(cfg):
     valid_score = 0.0
     for step, batch in enumerate(InfiniteIterator(train_loader)):
         del batch["question_ids"]
-        with torch.autocast(device_type='cuda', dtype=torch.float16):
+        with torch.cuda.amp.autocast():
             outputs = forward_step(model, batch, cfg)
         
         if flag_prtr <= 1:
