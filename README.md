@@ -1,7 +1,7 @@
 # SAS-VQA (Self-adaptive Sampling in Video Question Ansering)
 
 ## Introduction
-This repository the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering]()". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
+This repository the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
 Once running complete, sampled frames will be saved in a h5 file for fast loading during training and test time.
 
 We test our methods totally on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets.
