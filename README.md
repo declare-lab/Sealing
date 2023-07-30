@@ -1,11 +1,17 @@
-# SAS-VQA (Self-adaptive Sampling in Video Question Ansering)
+# SAS Video--QA (Self-adaptive Sampling in Video Question Ansering)
 
 ## Introduction
-This repository the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
+This repository contains the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
 Once running complete, sampled frames will be saved in a h5 file for fast loading during training and test time.
 
-We test our methods totally on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets.
-The implementation on CLIP (including our refined structure which remarkably enhances the accuracy on __raw-CLIP__) and GIT are in the folder "clip_and_git", while the implementation on All-in-one are under the folder "all_in_one".
+<p align="left">
+    <image src="MDF.png" width="324">
+    <image src="MIF.png" width="432">
+</p>
+
+Once running completes, sampled frames will be saved in a hdf5 (.h5) file as a "dataset" for fast loading during training and test time.
+We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**).
+The implementation on CLIP (including our refined structure **CLIP-Dec** which significantly enhances the performance on **raw-CLIP**) and GIT are in the folder "clip_and_git", while the implementation on All-in-one are under the folder "all_in_one".
 
 ## Usage
 ### 1. Downloading Datasets
@@ -18,7 +24,7 @@ The code to do sampling for all three models is same, under the folder "clip_and
 
 * To sample via MDF strategy, run the python script as follows:
     ```
-    python extract_features.py --dataset=<dataset_name> --dataset_root=<root_path> --sampling_strategy='repr' --model_name=<vlm_model_name>
+    python extract_features.py --dataset=<dataset_name> --dataset_root=<root_path> --sampling_strategy='repr' --model_name=<vlm_model_name> ... (other hps)
     ```
     If your code prompts an out-of-memory exception, please using a smaller chunksize (default=512) to shrink the input size per computation.
 
@@ -38,6 +44,8 @@ The code to do sampling for all three models is same, under the folder "clip_and
 For experiments on CLIP and GIT, please modify our provided reference scripts (in 'src/scripts'). For all-in-one, please check its attached README file for more details.
 
 ## Results
+The following displayed digits are prediction accuracy, whose definition can be found in our paper.
+
 ### CLIP-Dec
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
@@ -58,7 +66,7 @@ For experiments on CLIP and GIT, please modify our provided reference scripts (i
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
 |Report|46.5|42.9|64.2|
-|Uniform|46.1|42.7|64.0|
+|Reprd.|46.1|42.7|64.0|
 |MDF|__46.9__|43.8|__66.2__|
 |MIF|46.7|__44.0__|65.9|
 

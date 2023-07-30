@@ -28,9 +28,9 @@ def decode(seq_idx, idx_to_token, delim=None, stop_at_end=True):
 
 CHUNK_SIZE = 256
 INTERVAL = 20
-def sample_representative_frames(frames, model, K=16, W=8, debug_counter=None):
+def sample_representative_frames(frames, model, K=16, W=8, alpha=2.5):
     if W == -1: # adaptive width
-        W = len(frames) // K
+        W = len(frames) // (alpha * K)
     
     feat_chunks = []
     num_frames = frames.size(0)
@@ -48,7 +48,6 @@ def sample_representative_frames(frames, model, K=16, W=8, debug_counter=None):
         feat_chunks.append(chunk_feats)
     
     if len(feat_chunks) == 0:   # empty input
-        debug_counter['Zeros'] += 1
         return frames.new_zeros(K, 3, 224, 224)
 
     all_feats = torch.cat(feat_chunks, dim=0) # (N, 768)
@@ -87,10 +86,6 @@ def sample_representative_frames(frames, model, K=16, W=8, debug_counter=None):
             v, idx = lcl_avg[right:r].topk(1)
             heappush(intvs, (-v, (right, r), right+idx))
     
-    # res.sort()
-    if len(res) < K:
-        res = lcl_avg.topk(K)[1]
-        debug_counter['Failure'] += 1
     return frames[res]
 
 def sample_frames_uniform(frames, K=8):

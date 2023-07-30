@@ -71,9 +71,7 @@ def generate_h5_parallel(processor, model, video_paths, args, h5_outfile):
     cudathread.start()
     # let queue get filled
     time.sleep(8)
-    # IMG_HW = processor.image_processor.crop_size['height']
     IMG_HW = args.img_size
-    debug_counter = {'Failure': 0, 'Zeros': 0}
     with h5py.File(h5_outfile, 'w') as fd:    
         fd.create_dataset("sampled_frames", (len(video_paths), args.K, 3 * IMG_HW * IMG_HW))
         sampled_frames_h5 = fd["sampled_frames"]
@@ -87,7 +85,7 @@ def generate_h5_parallel(processor, model, video_paths, args, h5_outfile):
             if args.sampling_strategy == 'repr':
                 # move model to cuda, set it to eval mode
                 # FIXME: remove the counter
-                exted_frms = sample_representative_frames(video_frms, model, args.K, args.W, debug_counter)
+                exted_frms = sample_representative_frames(video_frms, model, K=args.K, W=args.W, alpha=float(args.alpha))
             elif args.sampling_strategy == 'uni':
                 exted_frms = sample_frames_uniform(video_frms, K=args.K)
             elif args.sampling_strategy == 'git6':  # same as GIT-VideoQA implementation
@@ -106,10 +104,6 @@ def generate_h5_parallel(processor, model, video_paths, args, h5_outfile):
         except Empty:
             pass
     
-    # FIXME: remove this
-    print('Total Failure:%d'%debug_counter['Failure'])
-    print('Total Zeros:%d'%debug_counter['Zeros'])
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     
@@ -127,7 +121,8 @@ if __name__ == '__main__':
     parser.add_argument('--intv', type=int, default=1, help='sampling interval between video frames')
     parser.add_argument('--sampling_strategy', default='uni', choices=['uni', 'repr', 'git6'], type=str)
     parser.add_argument('--K', type=int, default=16, help='number of frames to be sampled (esp. uniform sampling)')
-    parser.add_argument('--W', type=int, default=8, help='interval length to sample 2 points')
+    parser.add_argument('--W', type=int, default=-1, help='interval length to sample 2 points')
+    parser.add_argument('--alpha', type=str, default='2.5', help='width-adjust hp to control W, activated only when W=-1')
 
     # network params
     parser.add_argument('--vlm_model', type=str, default="Salesforce/blip-image-captioning-base")
