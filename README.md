@@ -58,9 +58,9 @@ The following displayed digits are prediction accuracy, whose definition can be 
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
 |Report|51.2|41.0|__69.1__|
-|Uniform|52.2|41.1|47.0|
-|MDF|__55.3__|42.0|68.8|
-|MIF|46.7|__42.3__|67.5|
+|Uniform|52.2|41.1|67.5|
+|MDF|__55.3__|42.0|__69.9__|
+|MIF|54.5|__42.3__|69.6|
 
 ### AllInOne-Base
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
