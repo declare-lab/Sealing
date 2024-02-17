@@ -1,4 +1,4 @@
-# SAS Video--QA (Self-adaptive Sampling in Video Question Ansering)
+# Self-adaptive Sampling in Video Question Ansering
 
 ## Introduction
 This repository contains the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
@@ -46,7 +46,7 @@ For experiments on CLIP and GIT, please modify our provided reference scripts (i
 ## Results
 The following displayed digits are prediction accuracy, whose definition can be found in our paper.
 
-### CLIP-Dec
+### CLIP-Dec (3 Frame)
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
 |noDec|27.7|30.3|42.8|
@@ -54,7 +54,7 @@ The following displayed digits are prediction accuracy, whose definition can be 
 |MDF|__35.0__|35.2|__63.2__|
 |MIF|__35.0__|__35.4__|61.8|
 
-### GIT-Base
+### GIT-Base (6 Frame)
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
 |Report|51.2|41.0|__69.1__|
@@ -62,13 +62,28 @@ The following displayed digits are prediction accuracy, whose definition can be 
 |MDF|__55.3__|42.0|__69.9__|
 |MIF|54.5|__42.3__|69.6|
 
-### AllInOne-Base
+### AIO-Base (3 Frame)
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
 |---|---|---|---|
 |Report|46.5|42.9|64.2|
 |Reprd.|46.1|42.7|64.0|
 |MDF|__46.9__|43.8|__66.2__|
 |MIF|46.7|__44.0__|65.9|
+
+### AIO-Base+ on Next-QA (3 Frame)
+|Method|Val|Test|
+|---|---|---|
+|Base|48.4|48.1|
+|MIF|49.7|49.5|
+|MDF|50.2|49.8|
+
+
+### BLIP2-T5XXL on Next-QA (3 Frame)
+|Method|Val|Test|
+|---|---|---|
+|Base|60.1|59.7|
+|MIF|61.5|__61.2__|
+|MDF|__61.8__|61.1|
 
 ## Citation
 Please cite our paper if you find this project is related to your work
