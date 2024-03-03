@@ -1,11 +1,11 @@
-# Self-adaptive Sampling in Video Question Ansering
+# Learning-free Self-adaptive Sampling in Video Question Ansering
 
 ## Introduction
-This repository contains the official implementation code of the paper "[Self-adaptive Sampled Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
+This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
 Once running complete, sampled frames will be saved in a h5 file for fast loading during training and test time.
 
-<p align="left">
-    <image src="MDF.png" width="324">
+<p align="center">
+    <image src="MDF.png" width="324"> 
     <image src="MIF.png" width="432">
 </p>
 
