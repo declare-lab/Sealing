@@ -10,12 +10,15 @@ Once running complete, sampled frames will be saved in a h5 file for fast loadin
 </p>
 
 Once running completes, sampled frames will be saved in a hdf5 (.h5) file as a "dataset" for fast loading during training and test time.
-We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**).
+We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**, **NeXT-QA**).
 The implementation on CLIP (including our refined structure **CLIP-Dec** which significantly enhances the performance on **raw-CLIP**) and GIT are in the folder "clip_and_git", while the implementation on All-in-one are under the folder "all_in_one".
 
 ## Usage
 ### 1. Downloading Datasets
-To download MSVD-QA and MSRVTT-QA, please refer to this [repository](https://github.com/xudejing/video-question-answering). For TGIF-QA, please visit this [repository](https://github.com/YunseokJANG/tgif-qa) for specific downloading guidance.
+Please visit the corresponding repository and follow the instruction there to download the datasets.
+- [MSVD and MSRVTT](https://github.com/xudejing/video-question-answering)
+- [TGIF](https://github.com/YunseokJANG/tgif-qa)
+- [NExT-QA](https://github.com/doc-doc/NExT-QA)
 
 The suggested path to store these datasets is "model/dataset/<dataset_name>" 
 
@@ -97,4 +100,5 @@ Please cite our paper if you find this project is related to your work
       primaryClass={cs.CV}
 }
 ```
+## Contact
 Feel free to contact me at henryhan88888@gmail.com if you have any problems with the paper and code.
