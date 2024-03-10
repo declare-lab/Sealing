@@ -1,8 +1,8 @@
 # Learning-free Self-adaptive Sampling in Video Question Ansering
 
 ## Introduction
-This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". In this work we introduce two sampling strategies (__MDF__ and __MIF__) applied during the time of preparing the input data to pretrained image--text models. 
-Once running complete, sampled frames will be saved in a h5 file for fast loading during training and test time.
+This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)" (in submission). 
+In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Video Question Answering tasks on pretrained image--text models (ITMs). 
 
 <p align="center">
     <image src="MDF.png" width="324"> 
@@ -10,7 +10,7 @@ Once running complete, sampled frames will be saved in a h5 file for fast loadin
 </p>
 
 Once running completes, sampled frames will be saved in a hdf5 (.h5) file as a "dataset" for fast loading during training and test time.
-We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and three datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**, **NeXT-QA**).
+We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and 4 datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**, **NeXT-QA**).
 The implementation on CLIP (including our refined structure **CLIP-Dec** which significantly enhances the performance on **raw-CLIP**) and GIT are in the folder "clip_and_git", while the implementation on All-in-one are under the folder "all_in_one".
 
 ## Usage
@@ -46,7 +46,7 @@ The code to do sampling for all three models is same, under the folder "clip_and
 ### 3. How to run
 For experiments on CLIP and GIT, please modify our provided reference scripts (in 'src/scripts'). For all-in-one, please check its attached README file for more details.
 
-## Results
+## Results (Partial)
 The following displayed digits are prediction accuracy, whose definition can be found in our paper.
 
 ### CLIP-Dec (3 Frame)
