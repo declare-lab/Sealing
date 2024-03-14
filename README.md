@@ -7,8 +7,8 @@ This repository contains the official implementation code of the paper "[Self-ad
 In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Video Question Answering tasks on pretrained image--text models (ITMs). 
 
 <p align="center">
-    <image src="MDF.png" width="324"> 
-    <image src="MIF.png" width="432">
+    <image src="assets/MDF.png" width="324"> 
+    <image src="assets/MIF.png" width="432">
 </p>
 
 Once running completes, sampled frames will be saved in a hdf5 (.h5) file as a "dataset" for fast loading during training and test time.
