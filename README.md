@@ -13,7 +13,7 @@ In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Vide
 
 Once running completes, sampled frames will be saved in a hdf5 (.h5) file as a "dataset" for fast loading during training and test time.
 We test our methods on three models (__CLIP__, __GIT__ and __All-in-one__) and 4 datasets (**MSVD-QA**, **MSRVTT-QA**, **TGIF-Frame**, **NeXT-QA**).
-The implementation on CLIP (including our refined structure **CLIP-Dec** which significantly enhances the performance on **raw-CLIP**) and GIT are in the folder "clip_and_git", while the implementation on All-in-one are under the folder "all_in_one".
+The implementation on CLIP (including our refined structure **CLIP-Dec** which significantly enhances the performance on **raw-CLIP**) and GIT are in the folder `clip_and_git`, while the implementation on All-in-one are under the folder `all_in_one`.
 
 ## Usage
 ### 1. Downloading Datasets
