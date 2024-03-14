@@ -107,7 +107,7 @@ def generate_h5_parallel(processor, model, video_paths, args, h5_outfile):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     
-    # dataset info-选定数据集
+    # dataset info
     parser.add_argument('--dataset', default='msvd_qa', choices=['msvd_qa', 'msrvtt_qa', 'svqa'], type=str)
     parser.add_argument('--dataset_root', default='./dataset', type=str)
     parser.add_argument('--anno_path', default='annotations', type=str)
@@ -188,13 +188,4 @@ if __name__ == '__main__':
         # generate h5 file
         generate_h5_parallel(processor, vision_model, video_paths, args,
                     h5_outfile)
-
-    elif args.dataset == 'svqa':
-        args.annotation_file = './data/SVQA/questions.json'
-        args.video_dir = './data/SVQA/useVideo/'
-        video_paths = svqa.load_video_paths(args)
-        random.shuffle(video_paths)
-        # load model
-        generate_h5(processor, video_paths, args.num_clips,
-                args.outfile.format(args.dataset, args.feature_type, str(args.num_clips)))
 
