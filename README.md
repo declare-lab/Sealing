@@ -1,6 +1,6 @@
-# [NAACL-2024 Findings] Self-adaptive Sampling for Efficient Video Question Ansering
+# [NAACL-2024 (Findings)] Self-adaptive Sampling for Efficient Video Question Ansering
 
-🔥 [14/03/2024] This paper has been accepeted to NAACL 2024 Findings!
+🔥 [14/03/2024] This paper has been accepeted to NAACL 2024 (Findings)!
 
 ## Introduction
 This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". 
