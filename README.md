@@ -49,7 +49,7 @@ The code to do sampling for all three models is same, under the folder "clip_and
 For experiments on CLIP and GIT, please modify our provided reference scripts (in `src/scripts`). For all-in-one, please check its attached README file for more details.
 
 ## Results (Partial)
-The following displayed digits are prediction accuracy, whose definition can be found in our paper.
+The following results are prediction accuracy, which has been defined and customized for each dataset/model in our paper.
 
 ### CLIP-Dec (3 Frame)
 |Sampling|MSVD-QA|MSRVTT-QA|TGIF-Frame|
@@ -91,7 +91,7 @@ The following displayed digits are prediction accuracy, whose definition can be 
 
 ## Citation
 Please cite our paper if you find this project is related to your work
-```
+```bibtex
 @misc{han2023sas,
       title={SAS Video-QA: Self-Adaptive Sampling for Efficient Video Question-Answering}, 
       author={Wei Han and Hui Chen and Min-Yen Kan and Soujanya Poria},
@@ -101,5 +101,6 @@ Please cite our paper if you find this project is related to your work
       primaryClass={cs.CV}
 }
 ```
+
 ## Contact
-Feel free to contact me at henryhan88888@gmail.com if you have any problems with the paper and code.
+If you have any further inquireis about our code and paper, feel free to contact us at henryhan88888@gmail.com or chen.hui@ntu.edu.sg.
