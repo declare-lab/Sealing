@@ -1,7 +1,9 @@
-# Learning-free Self-adaptive Sampling in Video Question Ansering
+# [NAACL-2024] Self-adaptive Sampling for Efficient Video Question Ansering
+
+🔥 [14/03/2024] This paper has been accepeted to NAACL 2024!
 
 ## Introduction
-This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)" (in submission). 
+This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". 
 In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Video Question Answering tasks on pretrained image--text models (ITMs). 
 
 <p align="center">
@@ -25,13 +27,13 @@ The suggested path to store these datasets is "model/dataset/<dataset_name>"
 ### 2. Preprocessing
 The code to do sampling for all three models is same, under the folder "clip_and_git/src/preprocessing". 
 
-* To sample via MDF strategy, run the python script as follows:
+* To sample via MDF method, run the python script as follows:
     ```
     python extract_features.py --dataset=<dataset_name> --dataset_root=<root_path> --sampling_strategy='repr' --model_name=<vlm_model_name> ... (other hps)
     ```
     If your code prompts an out-of-memory exception, please using a smaller chunksize (default=512) to shrink the input size per computation.
 
-* To sample via MIF strategy, first run a uniform sampling with large K to obtain a sparse video sequence
+* To sample via MIF method, first run a uniform sampling with large K to obtain a sparse video sequence
 
     ```
     python extract_features.py --sampling_strategy='uni' ...
@@ -43,8 +45,8 @@ The code to do sampling for all three models is same, under the folder "clip_and
     python gen_sample.py --dataset=<dataset_name> --dataset_root=<root_path> --sampling_strategy='repr' --vlm_model=<vlm_model_name> --sim_model=<sim_model_name> --task='gen_inds'
     ```
 
-### 3. How to run
-For experiments on CLIP and GIT, please modify our provided reference scripts (in 'src/scripts'). For all-in-one, please check its attached README file for more details.
+### 3. Training and Inference
+For experiments on CLIP and GIT, please modify our provided reference scripts (in `src/scripts`). For all-in-one, please check its attached README file for more details.
 
 ## Results (Partial)
 The following displayed digits are prediction accuracy, whose definition can be found in our paper.
@@ -79,7 +81,6 @@ The following displayed digits are prediction accuracy, whose definition can be 
 |Base|48.4|48.1|
 |MIF|49.7|49.5|
 |MDF|50.2|49.8|
-
 
 ### BLIP2-T5XXL on Next-QA (3 Frame)
 |Method|Val|Test|
