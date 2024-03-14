@@ -33,10 +33,10 @@ The code to do sampling for all three models is same, under the folder "clip_and
     ```
     If your code prompts an out-of-memory exception, please using a smaller chunksize (default=512) to shrink the input size per computation.
 
-* To sample via MIF method, first run a uniform sampling with large K to obtain a sparse video sequence
+* To sample via MIF method, first run a uniform sampling with large K (e.g., 16 or 32) to obtain a sparse frame sequence
 
     ```
-    python extract_features.py --sampling_strategy='uni' ...
+    python extract_features.py --sampling_strategy='uni' --K 16 ...
     ```
     Then run the python script to capture and start sampling
     ```
