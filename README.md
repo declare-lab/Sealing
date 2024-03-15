@@ -103,4 +103,4 @@ Please cite our paper if you find this project is related to your work
 ```
 
 ## Contact
-If you have any enquiries about our code and paper, feel free to contact us at henryhan88888@gmail.com or chen.hui@ntu.edu.sg.
+If you have any enquiries about our code and paper, feel free to contact us at henryhan88888@gmail.com or chchenhui1996@gmail.com.
