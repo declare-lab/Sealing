@@ -1,4 +1,4 @@
-# [NAACL-2024 (Findings)] Self-adaptive Sampling for Efficient Video Question Ansering
+# [NAACL-2024] Self-adaptive Sampling for Efficient Video Question Ansering
 
 🔥 [14/03/2024] This paper has been accepeted to NAACL 2024 (Findings)!
 
@@ -103,4 +103,4 @@ Please cite our paper if you find this project is related to your work
 ```
 
 ## Contact
-If you have any further inquireis about our code and paper, feel free to contact us at henryhan88888@gmail.com or chen.hui@ntu.edu.sg.
+If you have any enquiries about our code and paper, feel free to contact us at henryhan88888@gmail.com or chen.hui@ntu.edu.sg.
