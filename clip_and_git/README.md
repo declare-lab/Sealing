@@ -1,12 +1,14 @@
-# CLIP and GIT with MDF and MIF
-This reporsitory contains code of sampling preprocessing (MDF and MIF, under the folder [src/preprocessing](src/preprocessing/)) and implementation of CLIP, CLIP-Dec, and GIT that read from the ".h5" file created during the sampling stage.
+# Introduction
+This reporsitory contains the code of 
+1. **Preprocessing**: frame sampling with MDF and MIF ([src/preprocessing](src/preprocessing/)). Sampled frames are saved in `hdf5` files as `datasets`.
+2. **Training/test** on CLIP, CLIP-Dec, and GIT: The datasets load from the `hdf5` files created in the first step.
 
 ## Usage
 The usage of the sampling code has been included in the upper-level [README.md](../README.md) file so we do not cover that part here anymore. Here we only illustrate how to run the latter part below.
 
 ### Setup
 We recommend to create a new conda environment to run this code. 
-```
+```bash
 conda create -n <your_env_name>
 ```
 After successfully creating the environment, install all the needed packages with __pip__
