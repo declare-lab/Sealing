@@ -16,31 +16,28 @@ pip install -r requirements.txt
 ```
 
 ### Configuration
-The configuration files are in ```src/configs/```. Here are some important items that with the most chance you are about to (and _have to_) modify
+The configuration files are in `src/configs/`. Here are some important items that at the most chance you need to modify
 ```json
 {
-    // paths to your train/val datasets
     "train/val_datasets": [
         "name": "", // dataset name
-        "txt": "",  // txt data
-        "img": ""   // img data
+        "txt": "",  // txt data path
+        "img": ""   // img data path
     ],
-    // model configurations
-    {
+    "model": {
         ...
         "pretrained_model": "", // the name of pretrained model you want to run
         "img_len": "", // number of images as input to the model
         ...
     }
-    // the location that your TEST text and image data to save
-    "inference_txt/img_db": "",
+    "inference_txt/img_db": "", // the location that your TEST text and image data to save
 }
 ```
 
 ### Start to run
 We provide many example scripts in ```scripts/run_<task_name>.py```. You can simply start training and evaluation via the command line
 ```bash
-bash scripts/run_/<task_name/>.sh
+bash scripts/run_<task_name>.sh $gpu_id
 ```
 
 ## Misc.
