@@ -4,7 +4,7 @@
 
 ## Introduction
 This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". 
-In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Video Question Answering tasks on pretrained image--text models (ITMs). 
+In this work we introduce two sampling strategies (__MDF__ and __MIF__) for Video Question Answering tasks on pretrained Visual Language Models (VLMs). 
 
 <p align="center">
     <image src="assets/MDF.png" width="324"> 
