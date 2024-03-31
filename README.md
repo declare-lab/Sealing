@@ -1,4 +1,4 @@
-# [NAACL-2024] Self-adaptive Sampling for Efficient Video Question Ansering
+# [NAACL-2024] Self-adaptive Sampling for Efficient Video Question Ansering on Image--Text Models
 
 🔥 [14/03/2024] This paper has been accepeted to NAACL 2024 (Findings)!
 
