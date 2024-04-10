@@ -7,7 +7,7 @@ This repository contains the official implementation code of the paper "[Self-ad
 In this work we introduce and study two simple sampling strategies (__MIF__ and __MDF__) for the tuning of Video Question Answering tasks on pretrained Visual Language Models (VLMs).
 
 Specifically, we first systematically test the performance of __MIF__ (**M**_ost_ **I**_mplied_ **F**_rames_) with varied backbone models as captioner and scorer. They work together to perform a "question-and-vision-aware" sampling.
-Then we draw inspiration from the results and analysis to further propose the more lightweight __MDF__ (**M**_ost_ **D**_ominant_ **F**_rames_), which takes one more step to discard the correlation of question and executs a "question-agnostic, vision-aware" sampling. This routine significantly boosts the efficiency while maintain or even gain higher performance on the tested datasets.
+Then we draw inspiration from the results and analysis to further propose the more lightweight __MDF__ (**M**_ost_ **D**_ominant_ **F**_rames_), which takes one more step to discard the correlation of question and executs a "question-agnostic, vision-aware" sampling. This routine significantly boosts the efficiency and gains competative or higher performance on the tested datasets.
 
 <p align="center">
     <image src="assets/MDF.png" width="324"> 
