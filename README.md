@@ -104,6 +104,8 @@ Please cite our paper if you find this project is related to your work
       primaryClass={cs.CV}
 }
 ```
+## Acknowledgement
+Code for AIO is adapted from [AIO official implementation](https://github.com/showlab/all-in-one)
 
 ## Contact
 If you have any enquiries about our code and paper, feel free to contact us at henryhan88888@gmail.com or chchenhui1996@gmail.com.
