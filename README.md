@@ -3,7 +3,7 @@
 🔥 [14/03/2024] This paper has been accepeted to NAACL 2024 (Findings)!
 
 ## Introduction
-This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering](https://arxiv.org/pdf/2307.04192.pdf)". 
+This repository contains the official implementation code of the paper "[Self-adaptive Sampling for Efficient Video Question Answering on Image--Text Models](https://arxiv.org/pdf/2307.04192.pdf)". 
 In this work we introduce and study two simple sampling strategies (__MIF__ and __MDF__) for the tuning of Video Question Answering tasks on pretrained Visual Language Models (VLMs).
 
 Specifically, we first systematically test the performance of __MIF__ (**M**_ost_ **I**_mplied_ **F**_rames_) with varied backbone models as captioner and scorer. They work together to perform a "question-and-vision-aware" sampling.
