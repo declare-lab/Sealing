@@ -95,13 +95,12 @@ The following results are prediction accuracy, which has been defined and custom
 ## Citation
 Please cite our paper if you find this project is related to your work
 ```bibtex
-@misc{han2023sas,
-      title={SAS Video-QA: Self-Adaptive Sampling for Efficient Video Question-Answering}, 
-      author={Wei Han and Hui Chen and Min-Yen Kan and Soujanya Poria},
-      year={2023},
-      eprint={2307.04192},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{han2024self,
+  title={Self-Adaptive Sampling for Accurate Video Question Answering on Image Text Models},
+  author={Han, Wei and Chen, Hui and Kan, Min-Yen and Poria, Soujanya},
+  booktitle={Findings of the Association for Computational Linguistics: NAACL 2024},
+  pages={2522--2534},
+  year={2024}
 }
 ```
 ## Acknowledgement
