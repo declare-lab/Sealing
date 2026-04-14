@@ -44,7 +44,7 @@ class BaseDataset(torch.utils.data.Dataset):
         self.data_dir = data_dir
         self.draw_options_text = draw_options_text
         self.num_frames = num_frames
-        if torch.distributed.get_rank() == 0:
+        if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
             print('*'*100)
             print("image sub datasets: {}".format(names))
         # print(names)
@@ -52,10 +52,10 @@ class BaseDataset(torch.utils.data.Dataset):
         if len(names) != 0:
             self.data_dir = os.path.join(self.data_dir, names[0].split('_')[0])  # e.g. coco_train -> coco
             split_name = names[0].split('_')[0]
-        if torch.distributed.get_rank() == 0:
+        if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
             print(self.data_dir)
         if split_name and split_name in ['msrvtt', 'cc3m', 'vcr']:
-            if torch.distributed.get_rank() == 0:
+            if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
                 print("no arrow available for {}, load from disk".format(names[0]))
         else:
             if len(names) != 0:
@@ -268,7 +268,6 @@ class BaseDataset(torch.utils.data.Dataset):
         if len(txt_keys) != 0:
             texts = [[d[0] for d in dict_batch[txt_key]] for txt_key in txt_keys]
             encodings = [[d[1] for d in dict_batch[txt_key]] for txt_key in txt_keys]
-            draw_text_len = len(encodings)
             flatten_encodings = [e for encoding in encodings for e in encoding]
             flatten_mlms = mlm_collator(flatten_encodings)
 

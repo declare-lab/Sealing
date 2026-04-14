@@ -395,6 +395,8 @@ def set_schedule(pl_module):
         optimizer = torch.optim.Adam(optimizer_grouped_parameters, lr=lr)
     elif optim_type == "sgd":
         optimizer = torch.optim.SGD(optimizer_grouped_parameters, lr=lr, momentum=0.9)
+    else:
+        raise ValueError(f"Unknown optim_type: {optim_type!r}. Must be one of 'adamw', 'adam', 'sgd'.")
 
     if pl_module.trainer.max_steps is None:
         max_steps = (

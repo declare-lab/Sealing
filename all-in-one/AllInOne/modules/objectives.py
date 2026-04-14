@@ -696,15 +696,15 @@ def compute_vcop(pl_module, batch):
     #     h = torch.cat((h, x[index, idx, 0].view(1, -1)), dim=0)
 
     # v2: vcop implementation
+    num_frames = pl_module.hparams.config["num_frames"]
+    classes = list(itertools.permutations(list(range(num_frames))))
     gt_labels = torch.ones(b)
-    idx = torch.randperm(pl_module.hparams.config["num_frames"])  # get random order
-    classes = list(itertools.permutations(list(range(len(idx.tolist())))))
+    idx = torch.randperm(num_frames)  # get random order
     label = classes.index(tuple(idx.tolist()))
     h = x[0, idx, 0].unsqueeze(0)
     gt_labels[0] = label
     for index in range(1, b):
-        idx = torch.randperm(pl_module.hparams.config["num_frames"])  # get random order
-        classes = list(itertools.permutations(list(range(len(idx.tolist())))))
+        idx = torch.randperm(num_frames)  # get random order
         label = classes.index(tuple(idx.tolist()))
         gt_labels[index] = label
         h = torch.cat((h, x[index, idx, 0].unsqueeze(0)), dim=0)

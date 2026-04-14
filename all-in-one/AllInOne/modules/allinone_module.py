@@ -65,17 +65,17 @@ class AllinoneTransformerSS(pl.LightningModule):
         self.token_type_embeddings = nn.Embedding(2, config["hidden_size"])
         self.token_type_embeddings.apply(objectives.init_weights)
 
-        flag = 0
         if self.hparams.config["load_path"] == "":
-            while not flag == 1:
+            for attempt in range(3):
                 try:
                     self.transformer = getattr(vit, self.hparams.config["vit"])(
                         pretrained=True, config=self.hparams.config
                     )
-                    flag = 1
-                except:
-                    print("load pretrained failed, try again")
-                    flag = 0
+                    break
+                except (OSError, RuntimeError) as e:
+                    print(f"load pretrained failed (attempt {attempt + 1}/3): {e}")
+                    if attempt == 2:
+                        raise
         else:
             self.transformer = getattr(vit, self.hparams.config["vit"])(
                 pretrained=False, config=self.hparams.config
@@ -142,18 +142,18 @@ class AllinoneTransformerSS(pl.LightningModule):
         hs = self.hparams.config["hidden_size"]
         # print(config["loss_names"])
         if config["loss_names"]["multiple_choice"] > 0:
-            self.itm_score = heads.ITMHead(config["hidden_size"])
-            self.itm_score.apply(objectives.init_weights)
+            self.mc_itm_score = heads.ITMHead(config["hidden_size"])
+            self.mc_itm_score.apply(objectives.init_weights)
 
         # :  vcr q2a task
         if config["loss_names"]["vcr_q2a"] > 0:
-            self.itm_score = heads.ITMHead(config["hidden_size"])
-            self.itm_score.apply(objectives.init_weights)
+            self.vcr_itm_score = heads.ITMHead(config["hidden_size"])
+            self.vcr_itm_score.apply(objectives.init_weights)
 
         # :  tvqa
         if config["loss_names"]["mc_vqa"] > 0:
-            self.itm_score = heads.ITMHead(config["hidden_size"])
-            self.itm_score.apply(objectives.init_weights)
+            self.vcr_itm_score = heads.ITMHead(config["hidden_size"])
+            self.vcr_itm_score.apply(objectives.init_weights)
 
         if self.hparams.config["loss_names"]["vqa"] > 0:
             vs = self.hparams.config["vqav2_label_size"]
@@ -169,12 +169,12 @@ class AllinoneTransformerSS(pl.LightningModule):
         if self.hparams.config["loss_names"]["vcr_q2a"] > 0:
             # for q2a
             self.rank_output = nn.Linear(hs, 1)
-            self.rank_output.weight.data = self.itm_score.fc.weight.data[1:, :]
-            self.rank_output.bias.data = self.itm_score.fc.bias.data[1:]
+            self.rank_output.weight.data = self.vcr_itm_score.fc.weight.data[1:, :]
+            self.rank_output.bias.data = self.vcr_itm_score.fc.bias.data[1:]
             # for qa2r
             self.rank_output_2 = nn.Linear(hs, 1)
-            self.rank_output_2.weight.data = self.itm_score.fc.weight.data[1:, :]
-            self.rank_output_2.bias.data = self.itm_score.fc.bias.data[1:]
+            self.rank_output_2.weight.data = self.vcr_itm_score.fc.weight.data[1:, :]
+            self.rank_output_2.bias.data = self.vcr_itm_score.fc.bias.data[1:]
 
             self.margin = 0.2
 
@@ -244,8 +244,8 @@ class AllinoneTransformerSS(pl.LightningModule):
         # test msrvtt multiple choice without finetune
         if self.hparams.config["loss_names"]["multiple_choice"] > 0:
             self.rank_output = nn.Linear(hs, 1)
-            self.rank_output.weight.data = self.itm_score.fc.weight.data[1:, :]
-            self.rank_output.bias.data = self.itm_score.fc.bias.data[1:]
+            self.rank_output.weight.data = self.mc_itm_score.fc.weight.data[1:, :]
+            self.rank_output.bias.data = self.mc_itm_score.fc.bias.data[1:]
             self.margin = 0.2
 
         allinone_utils.set_metrics(self)
@@ -265,9 +265,10 @@ class AllinoneTransformerSS(pl.LightningModule):
             self.load_state_dict(state_dict, strict=False)
         self.temporal_roll_module = TemporalRoll(n_segment=self.num_frames, v=0)
         # # print learnable param
-        for name, param in self.named_parameters():
-            if param.requires_grad:
-                print("learned param: ", name)
+        if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
+            for name, param in self.named_parameters():
+                if param.requires_grad:
+                    print("learned param: ", name)
         # ==== for linear evaluation action recognition
         self.spatial_mix = SpatialMixup()
 

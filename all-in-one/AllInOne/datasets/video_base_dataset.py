@@ -58,15 +58,17 @@ class BaseDataset(torch.utils.data.Dataset):
                 dataset_name = 'tgif'
             self.data_dir = os.path.join(self.data_dir, dataset_name)  # e.g. webvid_train -> webvid
             split_name = dataset_name
-        if torch.distributed.get_rank() == 0:
+        else:
+            split_name = None
+        if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
             print('*'*100)
             print("video datasets: {}".format(names))
         self.draw_options_text = draw_options_text
         self.num_frames = num_frames
-        if torch.distributed.get_rank() == 0:
+        if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
             print("# frames for base dataset is: {}".format(self.num_frames))
         if split_name in ['msrvtt', 'cc3m', 'webvid', 'msvd', 'vcr', 'howto100m', 'ego4d', 'yttemporal', 'tgif', 'hmdb51', 'k400']:
-            if torch.distributed.get_rank() == 0:
+            if not torch.distributed.is_initialized() or torch.distributed.get_rank() == 0:
                 print("no arrow available for {}, load from disk".format(names[0]))
         else:
             print("not support video dataset")
@@ -230,7 +232,6 @@ class BaseDataset(torch.utils.data.Dataset):
         if len(txt_keys) != 0:
             texts = [[d[0] for d in dict_batch[txt_key]] for txt_key in txt_keys]
             encodings = [[d[1] for d in dict_batch[txt_key]] for txt_key in txt_keys]
-            draw_text_len = len(encodings)
             flatten_encodings = [e for encoding in encodings for e in encoding]
             flatten_mlms = mlm_collator(flatten_encodings)
 
@@ -276,7 +277,7 @@ def sample_frames(num_frames, vlen, sample='rand', fix_start=None):
         for x in ranges:
             try:
                 frame_idxs.append(random.choice(range(x[0], x[1])))
-            except:
+            except ValueError:
                 frame_idxs.append(0)
     elif fix_start is not None:
         frame_idxs = [x[0] + fix_start for x in ranges]
@@ -359,7 +360,6 @@ def read_frames_decord(video_path, num_frames, mode='train', fix_start=None):
     decord.bridge.set_bridge('torch')
     vlen = len(video_reader)
     frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
-    print(frame_idxs)
     frames = video_reader.get_batch(frame_idxs).byte()
     frames = frames.permute(0, 3, 1, 2)
     return frames, frame_idxs, vlen
@@ -374,11 +374,11 @@ def read_frames_from_img_dir(video_path, num_frames, mode='train', fix_start=Non
     frame_idxs = sample_frames(num_frames, vlen, sample=sample, fix_start=fix_start)
     frames = []
     for idx in frame_idxs:
-        frame = cv2.imread(os.path.join(video_path, string(idx).zfill(3) + suffix))
+        frame = cv2.imread(os.path.join(video_path, str(idx).zfill(3) + suffix))
         frame = torch.from_numpy(frame).byte()
         frame = frame.permute(2, 0, 1)
         frames.append(frame)
-    frames = frames.permute(0, 3, 1, 2)
+    frames = torch.stack(frames)
     return frames, frame_idxs, vlen
 
 
@@ -444,10 +444,12 @@ def video_clip_reader(video_path, begin_time, end_time, duration, num_frames):
     frames = torch.stack(frames)
     cap.release()
     if frames.size(0) < num_frames:
-        zeros = torch.ones((num_frames - frames.size(1), 3, frames.size(-2), frames.size(-1)), dtype=torch.uint8).byte()
-        frames = torch.cat((frames, zeros), axis=1)
+        zeros = torch.ones((num_frames - frames.size(0), 3, frames.size(-2), frames.size(-1)), dtype=torch.uint8).byte()
+        frames = torch.cat((frames, zeros), axis=0)
     if frames.size(0) != num_frames:
-        Exception(RuntimeError)
+        raise RuntimeError(
+            f"Expected {num_frames} frames, got {frames.size(0)}"
+        )
     return frames
 
 
