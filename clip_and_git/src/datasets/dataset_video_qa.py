@@ -202,7 +202,29 @@ class BaseQACollator(object):
         self.nframe = nframe
         self.samp_policy = samp_policy
         self.img_size = img_size
-    
+
+    def _apply_sampling_policy(self, visual_inputs, batch):
+        bsz, orig_l, _ = visual_inputs.size()
+        if self.samp_policy == 'uniform':
+            T = orig_l // self.nframe + (1 if orig_l % self.nframe > 0 else 0)
+            inds = [int(i * self.nframe) for i in range(T)]
+            visual_inputs = visual_inputs[:, inds]
+        elif self.samp_policy == 'random':
+            rand_sample = torch.arange(orig_l).float().expand(bsz, -1)
+            inds = torch.multinomial(rand_sample, num_samples=self.nframe, replacement=False)
+            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, inds.size(-1))
+            visual_inputs = visual_inputs[vinds, inds]
+        elif self.samp_policy == 'single':
+            i = orig_l // 2
+            visual_inputs = visual_inputs[:, i:i+1]
+        elif self.samp_policy == 'question-caption':
+            sampled_inds = torch.LongTensor(list(d["sampled_inds"][:self.nframe] for d in batch))
+            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, sampled_inds.size(-1))
+            visual_inputs = visual_inputs[vinds, sampled_inds]
+        else:
+            raise ValueError("Sample strategy can only be chosen from ['uniform', 'random', 'single', 'question-caption']")
+        return visual_inputs
+
     def collate_batch(self, batch):
         raise NotImplementedError("collate function hasn't been implemented")
 
@@ -233,27 +255,8 @@ class VideoQACollator(BaseQACollator):
         text_input_ids = batch_enc.input_ids  # (B, L)
         text_attention_mask = batch_enc.attention_mask  # (B, L)
         
-        bsz, orig_l, _ = visual_inputs.size()
-        if self.samp_policy == 'uniform':
-            T = orig_l // self.nframe + (1 if orig_l % self.nframe > 0 else 0)
-            inds = [int(i*self.nframe) for i in range(T)]
-            visual_inputs = visual_inputs[:,inds]
-        elif self.samp_policy == 'random':
-            rand_sample = torch.arange(orig_l).float().expand(bsz, -1)
-            inds = torch.multinomial(rand_sample, num_samples=self.nframe, replacement=False)
-            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, inds.size(-1))
-            visual_inputs = visual_inputs[vinds,inds]
-        elif self.samp_policy == 'single':
-            i = orig_l // 2
-            visual_inputs = visual_inputs[:, i:i+1]
-        elif self.samp_policy == 'question-caption':
-            sampled_inds = torch.LongTensor(list(d["sampled_inds"][:self.nframe] for d in batch))
-            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, sampled_inds.size(-1))
-            visual_inputs = visual_inputs[vinds, sampled_inds]
-        else:
-            raise ValueError("Sample strategy can only be chosen from ['uniform', 'random', 'single']")
+        visual_inputs = self._apply_sampling_policy(visual_inputs, batch)
         B, L, _ = visual_inputs.size()
-        # assert L == self.nframe
         visual_inputs = visual_inputs.reshape(B*L, 3, self.img_size, self.img_size)
         video_lengths = [L] * B
         
@@ -301,32 +304,11 @@ class GITVideoQACollator(BaseQACollator):
         else:
             text_str_list = [d["q_str"] for d in text_examples]  # (B, )
             
-        bsz, orig_l, _ = visual_inputs.size()
-        if self.samp_policy == 'uniform':
-            T = orig_l // self.nframe + (1 if orig_l % self.nframe > 0 else 0)
-            inds = [int(i*self.nframe) for i in range(T)]
-            # inds = list(range(0, len(visual_inputs), self.nframe))
-            visual_inputs = visual_inputs[:,inds]
-        elif self.samp_policy == 'random':
-            rand_sample = torch.arange(orig_l).float().expand(bsz, -1)
-            inds = torch.multinomial(rand_sample, num_samples=self.nframe, replacement=False)
-            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, inds.size(-1))
-            visual_inputs = visual_inputs[vinds,inds]
-        elif self.samp_policy == 'single':
-            i = orig_l // 2
-            visual_inputs = visual_inputs[:, i:i+1]
-        elif self.samp_policy == 'question-caption':
-            sampled_inds = torch.LongTensor(list(d["sampled_inds"][:self.nframe] for d in batch))
-            vinds = torch.arange(bsz).unsqueeze(-1).expand(bsz, sampled_inds.size(-1))
-            visual_inputs = visual_inputs[vinds, sampled_inds]
-        elif self.samp_policy == 'importance':
-            visual_inputs = visual_inputs[:,:self.nframe]
+        if self.samp_policy == 'importance':
+            visual_inputs = visual_inputs[:, :self.nframe]
         else:
-            raise ValueError("Sample strategy can only be chosen from ['uniform', 'random']")
-        
-        # FIXME: only impl single here
+            visual_inputs = self._apply_sampling_policy(visual_inputs, batch)
         B, L, _ = visual_inputs.size()
-        # assert L == self.nframe
         visual_inputs = visual_inputs.reshape(B, L, 3, self.img_size, self.img_size)
         video_lengths = [L] * B
         
