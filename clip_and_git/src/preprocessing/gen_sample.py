@@ -2,20 +2,16 @@ import argparse, os
 import h5py, json
 from tqdm import tqdm
 import torch
-from torch import nn
 import random
 import numpy as np
-from datautils.utils import Timer
 from torch.nn.functional import softmax
 import sys
 sys.path.append('./')
-from src.utils.basic_utils import load_jsonl, load_json, save_json, get_rounded_percentage
-# from datautils import tgif_qa
+from src.utils.basic_utils import load_json, save_json
 from datautils import msrvtt_qa
 from datautils import msvd_qa
-# from datautils import svqa
 from transformers import AutoProcessor, AutoModelForCausalLM, AutoTokenizer, AutoModelForSequenceClassification
-from src.utils.logger import LOGGER, TB_LOGGER, add_log_to_file, RunningMeter
+from src.utils.logger import LOGGER
 
 
 def get_cap(processor, cap_model, frms):
@@ -147,8 +143,7 @@ if __name__ == '__main__':
             h5_outfile = os.path.join(h5_path, args.outfile.format(args.dataset))
             anno_path = os.path.join(dataset_path, args.anno_path)
             
-            # generate h5 file
-            generate_cap(processor, caption_model, anno_path, h5_outfile, vid_map_file, args)
+            generate_cap(processor, caption_model, anno_path, h5_outfile)
 
         elif args.dataset == 'svqa':
             args.annotation_file = './data/SVQA/questions.json'
