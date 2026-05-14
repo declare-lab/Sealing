@@ -1,25 +1,26 @@
 import argparse, os
 import h5py, json
-import cv2
-from PIL import Image
 from tqdm import tqdm
 import torch
-from torch import nn
-import torchvision
 import random
 import numpy as np
 from datautils.utils import sample_representative_frames, sample_frames_uniform, Timer
-# from datautils import tgif_qa
 from datautils import msrvtt_qa
 from datautils import msvd_qa
-# from datautils import svqa
-from transformers import CLIPImageProcessor, CLIPVisionModel, GitVisionModel
-# from transformers import BLIPImageProcessor, BLIPVisionModel
-from transformers import AutoProcessor
+from transformers import GitVisionModel, AutoProcessor
 from prefetch_loader import *
-from queue import Queue, Empty, Full
+from queue import Queue, Empty
 from threading import Thread
-from collections import Counter
+
+
+def _setup_and_run_extraction(processor, vision_model, video_paths, args, dataset_path):
+    outpath = os.path.join(dataset_path, args.h5_fname)
+    os.makedirs(outpath, exist_ok=True)
+    h5_outfile = os.path.join(outpath, args.outfile.format(args.dataset, args.feature_type))
+    json_outfile = os.path.join(outpath, 'vidmapping.json')
+    if not os.path.exists(json_outfile):
+        generate_vidid_json(video_paths, json_outfile)
+    generate_h5_parallel(processor, vision_model, video_paths, args, h5_outfile)
 
 
 def generate_vidid_json(video_paths, json_outfile):
@@ -155,37 +156,12 @@ if __name__ == '__main__':
         args.video_dir = os.path.join(dataset_path, 'video')
         video_paths = msrvtt_qa.load_video_paths(args)
         random.shuffle(video_paths)
-
-        # load model
-        outpath = os.path.join(dataset_path, args.h5_fname)
-        if not os.path.exists(outpath):
-            os.mkdir(outpath)
-        h5_outfile = os.path.join(outpath, args.outfile.format(args.dataset, args.feature_type))
-        json_outfile = os.path.join(outpath, 'vidmapping.json')
-        
-        # generate mapping dict
-        if not os.path.exists(json_outfile):
-            generate_vidid_json(video_paths, json_outfile)
-        # generate h5 file
-        generate_h5_parallel(processor, vision_model, video_paths, args,
-                    h5_outfile)
+        _setup_and_run_extraction(processor, vision_model, video_paths, args, dataset_path)
 
     elif args.dataset == 'msvd_qa':
         args.annotation_file = os.path.join(dataset_path, args.anno_path, 'qa_{}.json')
         args.video_dir = os.path.join(dataset_path, 'video')
         video_paths = msvd_qa.load_video_paths(args)
         random.shuffle(video_paths)
-        
-        outpath = os.path.join(dataset_path, args.h5_fname)
-        if not os.path.exists(outpath):
-            os.mkdir(outpath)
-        h5_outfile = os.path.join(outpath, args.outfile.format(args.dataset, args.feature_type))
-        json_outfile = os.path.join(outpath, 'vidmapping.json')
-        
-        # generate mapping dict
-        if not os.path.exists(json_outfile):
-            generate_vidid_json(video_paths, json_outfile)
-        # generate h5 file
-        generate_h5_parallel(processor, vision_model, video_paths, args,
-                    h5_outfile)
+        _setup_and_run_extraction(processor, vision_model, video_paths, args, dataset_path)
 
