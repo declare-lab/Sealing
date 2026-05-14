@@ -10,3 +10,6 @@ unused/
 
 # saved checkpoints
 saved_models/
+
+# Claude Code
+.claude/
